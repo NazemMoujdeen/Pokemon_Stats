@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path="pokemon")
@@ -21,15 +22,12 @@ public class PokemonController {
     @GetMapping
     public List<Pokemon> getPokemon(
             // ? is used to enter param in url
-            @RequestParam(required = false) Integer number,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) Boolean legendary) {
 
-        if( number != null ) {
-            return pokemonService.getPokemonsByNumber(number);
-        }
-        else if( name != null ) {
+
+        if( name != null ) {
             return pokemonService.getPokemonsByName(name);
 
         }
@@ -43,7 +41,12 @@ public class PokemonController {
             return pokemonService.getPokemons();
         }
     }
-
+    @GetMapping("/{pokemonNumber}")
+    public ResponseEntity<Pokemon> getPokemonByNumber(@PathVariable Integer pokemonNumber) {
+        Optional<Pokemon> pokemon = pokemonService.getPokemonByNumber(pokemonNumber);
+        return pokemon.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
     @PostMapping
      public ResponseEntity<Pokemon> addPokemon(@RequestBody Pokemon pokemon) {
         Pokemon createdPokemon = pokemonService.addPokemon(pokemon);

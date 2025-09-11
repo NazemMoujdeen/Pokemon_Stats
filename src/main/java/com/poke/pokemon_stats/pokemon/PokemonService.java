@@ -23,10 +23,8 @@ public class PokemonService {
 
     }
     //filters pokemon by their number
-    public List<Pokemon> getPokemonsByNumber(Integer number) {
-        return pokemonRepository.findAll().stream()
-                .filter(pokemon -> number.equals(pokemon.getNumber()))
-                .collect(Collectors.toList());
+    public Optional<Pokemon> getPokemonByNumber(Integer pokemonNumber) {
+        return pokemonRepository.findById(pokemonNumber);
     }
     //filters pokemon by their types
     public List<Pokemon> getPokemonsByType(String type) {
