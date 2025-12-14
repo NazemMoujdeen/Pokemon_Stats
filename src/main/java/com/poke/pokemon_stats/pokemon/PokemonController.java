@@ -11,7 +11,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(path="pokemon")
 //allows connections from all, industry standard requires a cors file that has specific permissions
-@CrossOrigin
+@CrossOrigin(origins = "${FRONTEND_URL:http://localhost:5173}")
 public class PokemonController {
     private final PokemonService pokemonService;
 
